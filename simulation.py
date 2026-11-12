@@ -2,27 +2,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #---------définir variables------------
-m=2.0 #kg
+m = 2.0 #kg
 g = 9.81 #m/s**2
 fd = float(input("entrez un coefficient de frottement : "))
 
-d=15.0 #m
+d = 15.0 #m
 h = 2.75 #m
 h1 = float(input("entrez la hauteur du plus haut point d'ancrage : "))
 h2 = h1-h
-L=15.5 #m
+L = 15.5 #m
 
-f = np.sqrt(d**2 + h**2)
-alpha = np.arctan(h / d)
+f = np.sqrt(d ** 2 + h ** 2)
+alpha = np.arctan((h1 - h2) / d)
 
-a= L / 2
-b=np.sqrt((L**2 - f**2) / 4)
+a = L / 2
+b = np.sqrt((L ** 2 - f ** 2) / 4)
 
 #-----tableau temps-----
 
 end = 20
 step = 0.01
-t=np.arange(0,end,step)
+t = np.arange(0,end,step)
 
 #--------listes de résultats vides-------------
 u = np.empty_like(t)
@@ -38,19 +38,19 @@ du[0] = 0
 for i in range(len(t) - 1):
  dt = step
 
- v_prime = (b * u[i]) / (a**2*np.sqrt(1-(u[i]**2 / a**2)))
- v_second= b / (a**2*np.sqrt((1-(u[i]**2 / a**2))**3))
+ v_prime = (b * u[i]) / (a ** 2 * np.sqrt(1 - (u[i] ** 2 / a ** 2)))
+ v_second= b / (a ** 2 * np.sqrt((1 - (u[i] ** 2 / a ** 2)) ** 3))
 
  ddu[i] = (
- -(v_prime*v_second*du[i]**2)/(1+v_prime**2)
- -(fd*du[i]/m)
- -g*(np.sin(alpha)+v_prime*np.cos(alpha))/(1+v_prime**2)
+    - (v_prime * v_second * du[i] ** 2) / ( 1 + v_prime ** 2)
+    - (fd * du[i] / m)
+    - g * (np.sin(alpha) + v_prime * np.cos(alpha)) / (1 + v_prime ** 2)
  ) #exo 6 annexe H2 dernière ligne
 
- du[i+1] = du[i] + ddu[i]*dt
- u[i+1] = u[i] + du[i]*dt
+ du[i+1] = du[i] + ddu[i] * dt
+ u[i+1] = u[i] + du[i] * dt
 
-v = -b * np.sqrt(1 - u**2 / a**2) #exo 3 annexe H2 première ligne
+v = -b * np.sqrt(1 - u ** 2 / a ** 2) #exo 3 annexe H2 première ligne
 
 #----------graphiques--------------
 plt.figure(figsize=(10, 6))
