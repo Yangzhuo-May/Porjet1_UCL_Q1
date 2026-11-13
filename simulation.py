@@ -7,13 +7,14 @@ g = 9.81 #m/s**2
 fd = float(input("entrez un coefficient de frottement : "))
 
 d = 15.0 #m
-h = 2.75 #m
+h_diff = 2.75 #m
 h1 = float(input("entrez la hauteur du plus haut point d'ancrage : "))
-h2 = h1-h
+h2 = h1-h_diff
 L = 15.5 #m
 
+h = h2 - h1
 f = np.sqrt(d ** 2 + h ** 2)
-alpha = np.arctan((h1 - h2) / d)
+alpha = np.arctan(h / d)
 
 a = L / 2
 b = np.sqrt((L ** 2 - f ** 2) / 4)
@@ -59,19 +60,18 @@ for i in range(len(t) - 1):
  dv[i] = v_prime * du[i]
  ddv[i] = v_second * (du[i] ** 2) + v_prime * ddu[i]
 
-# v = -b * np.sqrt(1 - u ** 2 / a ** 2) #exo 3 annexe H2 première ligne
+ddu[-1] = ddu[-2]
 
 v = -b * np.sqrt(1 - u**2 / a**2) #exo 3 annexe H2 première ligne
 
 dv[-1] = (
     (b * u[-1]) / (a**2 * np.sqrt(1 - (u[-1] ** 2 / a**2))) * du[-1]
-
 )
 
 ddv[-1] = v_second * (du[-1] ** 2) + v_prime * ddu[-1]
 
 #----------graphiques--------------
-plt.figure(figsize=(10, 10))
+plt.figure(figsize=(6, 10))
 
 #trajectoire de la cabine (u en fonction de v)
 plt.subplot(4, 1, 1)
@@ -102,12 +102,13 @@ plt.grid(True)
 plt.legend()
 
 plt.subplot(4, 1, 4)
-plt.plot(t, u, label="u")
-plt.plot(t, v, label="v")
-plt.xlabel("t [s]")
-plt.ylabel("u, v [m]")
+plt.plot(t, u, label="Position u(t)", color="b")
+plt.plot(t, v, label="Position v(t)", color="r")
+plt.title("Évolution de la position u en fonction du temps")
+plt.xlabel("Temps t (s)")
+plt.ylabel("Position u (m)")
+plt.grid(True, linestyle=":", alpha=0.6)
 plt.legend()
-plt.grid(True)
 plt.tight_layout()
 
 plt.show()
